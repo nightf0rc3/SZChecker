@@ -41,7 +41,7 @@ public class SonderzeichenChecker {
 	 */
 	private String readFile() {
 		String content= "";
-		try (FileInputStream fis = new FileInputStream(this.filename)) {
+		try (FileInputStream fis = new FileInputStream(filename)) {
 			int input;
 			while ((input = fis.read()) != -1) {
 				content += (char) input;
@@ -57,7 +57,7 @@ public class SonderzeichenChecker {
 	
 	/**
 	 * writes given content to file.
-	 * @param content
+	 * @param content corrected string
 	 */
 	public void writeFile(String content){
 		File file = new File(this.newFilename);
@@ -72,33 +72,33 @@ public class SonderzeichenChecker {
 	 * checks a file for umlauts and replaces them.
 	 */
 	public void checkFile() {
-		String content = this.readFile();
-		String[] lines = content.split("\r\n|\r|\n");
+		String text = this.readFile();
+		String[] lines = text.split("\r\n|\r|\n");
 		boolean fine = true;
 		System.out.println("File: " + filename + " (" + lines.length + " lines)");
 		for (int i = 0; i < lines.length; i++) {
 			for (int j = 0; j < badChars.length; j++) {
 				if (lines[i].contains("" + badChars[j])) {
-					System.out.println("Bad Char \"" + badChars[j] + "\" at line " + (i+1));
+					System.out.println("Bad Char '" + badChars[j] + "' at line " + (i+1));
 					fine = false;
-					if (this.createFile) {
-						content = content.replace(this.badChars[j], goodChars[j]);
+					if (createFile) {
+						text = text.replace(badChars[j], goodChars[j]);
 					}
 				}
 			}
 		}
 		if (fine) {
 			System.out.println("No umlauts found!");
-		} else if (this.createFile) {
-			this.writeFile(content);
-			System.out.println("Wrote clean version to " + this.newFilename);
+		} else if (createFile) {
+			this.writeFile(text);
+			System.out.println("Wrote clean version to " + newFilename);
 		}
 	}
 
 	
 	/**
 	 * main method.
-	 * @param args
+	 * @param args command line arguments
 	 */
 	public static void main(String[] args) {
 		if (args.length > 0) {
